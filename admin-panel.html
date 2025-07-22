@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div>
+        <h2>Configure Email</h2>
+        <textarea id="recipients" placeholder="Comma separated emails"></textarea><br />
+        <input type="text" id="subject" placeholder="Subject" /><br />
+        <textarea id="body" placeholder="Email Body"></textarea><br />
+        <button onclick="saveEmailConfig()">Save</button>
+    </div>
+
+    <script type="module">
+        import { db, doc, setDoc } from './firebase-config.js';
+
+        async function saveEmailConfig() {
+            const recipients = document.getElementById('recipients').value;
+            const subject = document.getElementById('subject').value;
+            const body = document.getElementById('body').value;
+
+            await setDoc(doc(db, "emailConfig", "global"), {
+                recipients,
+                subject,
+                body
+            });
+
+            alert("Email configuration saved!");
+        }
+    </script>
+</body>
+
+</html>
