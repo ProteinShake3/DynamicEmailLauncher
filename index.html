@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Launcher</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <button onclick="sendEmail()">Send Email</button>
+
+  <script type="module">
+    import { db, doc, getDoc } from './firebase-config.js';
+
+    async function sendEmail() {
+      const docRef = doc(db, "emailConfig", "global");
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const to = data.recipients;
+        const subject = data.subject;
+        const body = data.body;
+
+        const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailtoLink;
+      } else {
+        alert("No email configuration found.");
+      }
+    }
+  </script>
+</body>
+
+</html>
